@@ -1,0 +1,190 @@
+<html xmlns:th="https://www.thymeleaf.org" lang="EN">
+
+<head>
+    <title>Pebblely UI</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/pebblely.css">
+</head>
+
+<body>
+<div class="credits-container">
+    <div class="pebblely-credits">
+        <label for="credits">Pebblely credits:</label>
+        <a th:text="${credits}" id="credits"></a>
+    </div>
+</div>
+<div class="container">
+    <div class="container-column">
+        <div class="column">
+            <h3>Uploaded Files</h3>
+            <ul>
+                <li th:each="file : ${originals}">
+                    <div class="file-item">
+                        <img th:if="${file != null}" src="/static/file-icon.png" alt="File Icon" class="file-icon"/>
+                        <a th:href="${file}" th:text="${#strings.substringAfter(file, host)}"></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-column">
+        <div class="column">
+            <div class="upload-form">
+                <h3>Upscale</h3>
+                <form method="POST" enctype="multipart/form-data" action="/upscale">
+                    <div class="file-selection">
+                        <input type="file" name="files" id="removeUpscaleFilesInput" multiple/>
+                    </div>
+                    <ul id="selectedUpscaleFilesList"></ul>
+                    <div class="size-selection">
+                        <label for="upscaleSize">Size:</label>
+                        <select name="upscaleSize" id="upscaleSize">
+                            <option value="1024">1024</option>
+                            <option value="2048">2048</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Upload"/>
+                </form>
+            </div>
+        </div>
+        <div class="column-transformations">
+            <h3>Pebblely Transformations</h3>
+            <ul>
+                <li th:each="file : ${upscale}">
+                    <div class="file-item">
+                        <img th:if="${file != null}" src="/static/file-icon.png" alt="File Icon" class="file-icon"/>
+                        <a th:href="${file}" th:text="${#strings.substringAfter(file, host)}"></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-column">
+        <div class="column">
+            <div class="upload-form">
+                <h3>Remove background</h3>
+                <form method="POST" enctype="multipart/form-data" action="/remove-background">
+                    <div class="file-selection">
+                        <input type="file" name="files" id="removeBackgroundFilesInput" multiple/>
+                    </div>
+                    <ul id="selectedRemovedFilesList"></ul>
+                    <input type="submit" value="Upload"/>
+                </form>
+            </div>
+        </div>
+        <div class="column-transformations">
+            <h3>Pebblely Transformations</h3>
+            <ul>
+                <li th:each="file : ${removed}">
+                    <div class="file-item">
+                        <img th:if="${file != null}" src="/static/file-icon.png" alt="File Icon" class="file-icon"/>
+                        <a th:href="${file}" th:text="${#strings.substringAfter(file, host)}"></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-column">
+        <div class="column">
+            <div class="upload-form">
+                <h3>Create background</h3>
+                <form method="POST" enctype="multipart/form-data" action="/create-background">
+                    <div class="file-selection">
+                        <input type="file" name="files" id="createBackgroundFilesInput" multiple/>
+                    </div>
+                    <ul id="selectedCreatedFilesList"></ul>
+                    <div class="theme-selection">
+                        <label for="theme">Theme:</label>
+                        <select name="theme" id="theme">
+                            <option th:each="pebblely_theme: ${themes}" th:value="${pebblely_theme}"
+                                    th:text="${pebblely_theme}"></option>
+                        </select>
+                    </div>
+                    <input type="text" name="description" placeholder="Description"/>
+                    <div class="styles">
+                        <a>Styles:</a>
+                        <div class="color-style">
+                            <label for="styleColorBackground">Color:</label>
+                            <input type="checkbox" id="colorCheckboxBackground"/>
+                            <input type="color" name="styleColor" id="styleColorBackground" hidden="hidden"/>
+                        </div>
+                        <div class="sub-file-selection">
+                            <label for="styleImage">Image:</label>
+                            <input type="file" name="styleImage" id="styleImage"/>
+                        </div>
+                    </div>
+                    <input type="text" name="negative" placeholder="Negative"/>
+                    <input type="number" name="height" placeholder="Height"/>
+                    <input type="number" name="width" placeholder="Width"/>
+                    <input type="submit" value="Upload"/>
+                </form>
+            </div>
+        </div>
+        <div class="column-transformations">
+            <h3>Pebblely Transformations</h3>
+            <ul>
+                <li th:each="file : ${created}">
+                    <div class="file-item">
+                        <img th:if="${file != null}" src="/static/file-icon.png" alt="File Icon"
+                             class="file-icon"/>
+                        <a th:href="${file}" th:text="${#strings.substringAfter(file, host)}"></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-column">
+        <div class="column">
+            <div class="upload-form">
+                <h3>Inpaint</h3>
+                <form method="POST" enctype="multipart/form-data" action="/inpaint">
+                    <div class="file-selection">
+                        <input type="file" name="files" id="inpaintFilesInput" multiple/>
+                    </div>
+                    <div class="mask-file-selection">
+                        <label for="mask">Mask:</label>
+                        <input type="file" name="mask" id="mask" required/>
+                    </div>
+                    <div class="theme-selection">
+                        <label for="themeInpaint">Theme:</label>
+                        <select name="theme" id="themeInpaint">
+                            <option th:each="pebblely_theme: ${themes}" th:value="${pebblely_theme}"
+                                    th:text="${pebblely_theme}"></option>
+                        </select>
+                    </div>
+                    <input type="text" name="description" placeholder="Description"/>
+                    <div class="styles">
+                        <a>Styles:</a>
+                        <div class="color-style">
+                            <label for="styleColorInpaint">Color:</label>
+                            <input type="checkbox" id="colorCheckboxInpaint"/>
+                            <input type="color" name="styleColor" id="styleColorInpaint" hidden="hidden"/>
+                        </div>
+                        <div class="sub-file-selection">
+                            <label for="styleImageInpaint">Image:</label>
+                            <input type="file" name="styleImage" id="styleImageInpaint"/>
+                        </div>
+                    </div>
+                    <input type="text" name="negative" placeholder="Negative"/>
+                    <input type="submit" value="Upload"/>
+                    <ul id="selectedInpaintFilesList"></ul>
+                </form>
+            </div>
+        </div>
+        <div class="column-transformations">
+            <h3>Pebblely Transformations</h3>
+            <ul>
+                <li th:each="file : ${inpaint}">
+                    <div class="file-item">
+                        <img th:if="${file != null}" src="/static/file-icon.png" alt="File Icon" class="file-icon"/>
+                        <a th:href="${file}" th:text="${#strings.substringAfter(file, host)}"></a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/fileListing.js"></script>
+</body>
+
+</html>
